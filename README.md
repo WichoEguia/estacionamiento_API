@@ -1,4 +1,8 @@
-# Socket Server
+# Servidor de  estacionamiento
+Servidor restfull de sockets con conección a base de datos mongo db
+para proyecto de automatización. Simulador de estacionamiento.
+
+## Instalación
 
 Reconstruir modulos de node
 ```
