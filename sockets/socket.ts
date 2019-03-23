@@ -24,10 +24,5 @@ export const clienteDesconectado = (cliente: Socket, io: Server) => {
 }
 
 export const crearAuto = (cliente: Socket, io: Server) => {
-    cliente.on('crearAuto', (payload: any, callback: Function) => {
-        automovil.nuevoAuto(payload);
-        setTimeout(() => {
-            callback();
-        }, 500);
-    });
+    
 }

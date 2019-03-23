@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import Server from '../classes/Server';
+import Server from '../libraries/Server';
 import CajonEstacionamiento from '../models/CajonEstacionamiento';
 import * as automovil from './../controllers/automovil.controller'
 import * as estacionamiento from './../controllers/estacionamiento.controller';

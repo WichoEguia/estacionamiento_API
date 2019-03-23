@@ -12,11 +12,12 @@ interface cajon {
  * El estado inicial de este se reinicia una cada dia.
  */
 class controlEstacionamiento {
+    private file: string = 'C:/Users/Luis Eguia.EQUIPO-DELL/Documents/Proyectos/Estacionamiento/server/data/estacionamiento.json';
     private estacionamiento: cajon[] = [];
     private hoy: number | Date = new Date().getDate();
 
     constructor() {
-        let data = require('C:/Users/Luis Eguia.EQUIPO-DELL/Documents/Proyectos/Estacionamiento/server/data/estacionamiento.json');
+        let data = require(this.file);
 
         if (this.hoy === data.fecha) {
             this.estacionamiento = data.estacionamiento;
@@ -52,7 +53,7 @@ class controlEstacionamiento {
 
         let jsonDataString = JSON.stringify(jsonData);
 
-        fs.writeFileSync('data/estacionamiento.json', jsonDataString);
+        fs.writeFileSync(this.file, jsonDataString);
     }
 
     /**
@@ -96,12 +97,39 @@ class controlEstacionamiento {
         let cajon = this.getCajon(claveCajon);
         this.estacionamiento = this.estacionamiento.filter(cjn => cjn.clave != claveCajon);
 
-        if (cajon !== undefined) {
+        if (cajon) {
             cajon.estatus = 'ocupado';
             cajon.ocupante = claveAuto;
     
             this.estacionamiento.push(cajon);
     
+            this.grabarArchivo();
+
+            return {
+                cajon,
+                estacionamiento: this.estacionamiento
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Actualiza estado del cajón y su ocupante.
+     * 
+     * @param {string} claveAuto Identificador del auto.
+     * @returns Objeto obtenido o false si no lo encuentra.
+     */
+    abandonarCajon(claveCajon: string): { cajon: cajon, estacionamiento: cajon[] } | false {
+        let cajon = this.getCajon(claveCajon);
+        this.estacionamiento = this.estacionamiento.filter(cjn => cjn.clave != claveCajon);
+
+        if (cajon !== undefined) {
+            cajon.estatus = 'disponible';
+            cajon.ocupante = null;
+
+            this.estacionamiento.push(cajon);
+
             this.grabarArchivo();
 
             return {
