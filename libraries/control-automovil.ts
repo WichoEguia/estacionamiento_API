@@ -1,20 +1,12 @@
+import auto from './../models/Automovil';
 import fs from 'fs';
-
-interface auto {
-    clave: string;
-    estacionado: boolean;
-    fechaLlegada: Date | number;
-    fechaSalida?: Date | number | null;
-    cajonRecomendado?: string | null;
-    cajonOcupado?: string | null;
-}
 
 /**
  * Clase que administra la informacion del estacionamiento.
  * El estado inicial de este se reinicia una cada dia.
  */
-class controlAutomovil {
-    private file = 'C:/Users/Luis Eguia.EQUIPO-DELL/Documents/Proyectos/Estacionamiento/server/data/automovil.json';
+export class controlAutomovil {
+    private file = 'C:/Users/Luis Eguia.EQUIPO-DELL/Documents/Proyectos/Estacionamiento/data/automovil.json';
     private hoy: number = new Date().getDate();
     private automoviles: auto[] = [];
 
@@ -48,18 +40,21 @@ class controlAutomovil {
      * 
      * @return Automovil creado.
      */
-    addAuto(): auto {
-        let automovil: auto = {
+    addAuto(): { auto: auto, autos: auto[] } {
+        let auto: auto = {
             estacionado: false,
             fechaLlegada: Date.now(),
             clave: `auto-pro-${Date.now()}`
         };
 
-        this.automoviles.push(automovil);
+        this.automoviles.push(auto);
 
         this.grabarArchivo();
 
-        return automovil;
+        return {
+            auto,
+            autos: this.automoviles
+        };     
     }
 
     /**

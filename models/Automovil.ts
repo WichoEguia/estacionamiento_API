@@ -1,21 +1,8 @@
-import mongoose from 'mongoose';
-
-const Schema = mongoose.Schema;
-const AutoSchema = new Schema({
-    estacionado: {
-        type: Boolean
-    },
-    llegada: {
-        type: Date,
-        default: Date.now()
-    },
-    salida: {
-        type: Date,
-        default: null
-    },
-    cajonAsignado: {
-        type: String
-    }
-});
-
-export default mongoose.model('Automovil', AutoSchema);
+export default interface auto {
+    clave: string;
+    estacionado: boolean;
+    fechaLlegada: Date | number;
+    fechaSalida?: Date | number | null;
+    cajonRecomendado?: string | null;
+    cajonOcupado?: string | null;
+}

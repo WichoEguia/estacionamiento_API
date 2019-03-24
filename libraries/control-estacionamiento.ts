@@ -1,11 +1,5 @@
+import cajon from './../models/CajonEstacionamiento';
 import fs from 'fs';
-
-interface cajon {
-    idx: number;
-    estatus: string;
-    clave: string | number;
-    ocupante: string | null; 
-}
 
 /**
  * Clase que administra la informacion del estacionamiento.
