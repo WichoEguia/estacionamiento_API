@@ -12,7 +12,7 @@ export class controlAutomovil {
 
     constructor() {
         let data = require(this.file);
-
+    
         if (this.hoy === data.fecha) {
             this.automoviles = data.autos;
         } else {

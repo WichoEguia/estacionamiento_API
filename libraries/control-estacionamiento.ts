@@ -5,8 +5,8 @@ import fs from 'fs';
  * Clase que administra la informacion del estacionamiento.
  * El estado inicial de este se reinicia una cada dia.
  */
-class controlEstacionamiento {
-    private file: string = 'C:/Users/Luis Eguia.EQUIPO-DELL/Documents/Proyectos/Estacionamiento/server/data/estacionamiento.json';
+export class controlEstacionamiento {
+    private file = 'C:/Users/Luis Eguia.EQUIPO-DELL/Documents/Proyectos/Estacionamiento/data/estacionamiento.json';
     private estacionamiento: cajon[] = [];
     private hoy: number | Date = new Date().getDate();
 
@@ -75,9 +75,14 @@ class controlEstacionamiento {
      * @returns {cajon} Cajón recomendado.
      */
     getCajonRecomendado(): cajon {
-        let idx = Math.floor(Math.random() * 20);
+        let cajon: cajon;
 
-        return this.estacionamiento[idx];
+        do {
+            let idx = Math.floor(Math.random() * 20);
+            cajon = this.estacionamiento[idx];
+        } while (cajon.estatus === 'ocupado');
+
+        return cajon;
     }
 
     /**
