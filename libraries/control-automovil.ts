@@ -52,7 +52,7 @@ export class controlAutomovil {
         this.grabarArchivo();
 
         return {
-            auto,
+            automovil,
             autos: this.automoviles
         };     
     }
