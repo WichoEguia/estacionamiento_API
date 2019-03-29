@@ -1,4 +1,5 @@
 import auto from './../models/Automovil';
+import { controlEstacionamiento } from './../libraries/control-estacionamiento';
 import fs from 'fs';
 
 /**
@@ -9,6 +10,7 @@ export class controlAutomovil {
     private file = 'C:/Users/Luis Eguia.EQUIPO-DELL/Documents/Proyectos/Estacionamiento/data/automovil.json';
     private hoy: number = new Date().getDate();
     private automoviles: auto[] = [];
+    private control_estacionamiento: controlEstacionamiento = new controlEstacionamiento();
 
     constructor() {
         let data = require(this.file);
@@ -44,7 +46,8 @@ export class controlAutomovil {
         let auto: auto = {
             estacionado: false,
             fechaLlegada: Date.now(),
-            clave: `auto-pro-${Date.now()}`
+            clave: `auto-pro-${Date.now()}`,
+            cajonRecomendado: <any>this.control_estacionamiento.getCajonRecomendado().clave
         };
 
         this.automoviles.push(auto);

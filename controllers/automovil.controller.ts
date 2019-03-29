@@ -36,14 +36,12 @@ export class automovilController {
     
     addAutomovil(req: Request, res: Response) {
         try {
-            let resultadoAuto = this.control_automovil.addAuto();
-            let cajon = this.control_estacionamiento.getCajonRecomendado();
+            let result = this.control_automovil.addAuto();
 
             res.json({
                 ok: true,
-                auto_creado: resultadoAuto.auto,
-                autos: resultadoAuto.autos,
-                cajon_recomendado: cajon
+                auto_creado: result.auto,
+                autos: result.autos
             });
         } catch (err) {
             return res.status(500).json({
