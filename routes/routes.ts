@@ -14,5 +14,6 @@ router.get('/getAutos', (req, res) => automovil.getAutomoviles(req, res));
 router.post('/addAuto', (req, res) => automovil.addAutomovil(req, res));
 
 router.get('/getEstacionamiento', (req, res) => estacionamiento.getEstacionamiento(req, res));
+router.post('/ocuparCajonEstacionamiento', (req, res) => estacionamiento.ocuparCajonEstacionamiento(req, res));
 
 export default router;

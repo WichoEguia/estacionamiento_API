@@ -1,6 +1,6 @@
 export default interface cajon {
     idx: number;
-    estatus: string;
+    estatus: string; // disponible, ocupado
     clave: string | number;
     ocupante: string | null;
 }

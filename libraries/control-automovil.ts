@@ -75,7 +75,8 @@ export class controlAutomovil {
      * @return Colección de automoviles.
      */
     getAutos(): auto[] {
-        return this.automoviles;
+        const data = require(this.file);
+        return data.autos;
     }
 
     /**
@@ -85,7 +86,7 @@ export class controlAutomovil {
      * @param claveAuto Clave del auto.
      * @param accion Accion que se realizará 'recomendar-cajon', 'ocupar-cajon', 'abandonar-cajon'.
      */
-    cambiaEstadoAuto(claveCajon: string, claveAuto: string, accion: string): { autoModificado: auto, automoviles: auto[] } | false {
+    cambiaEstadoAuto(claveCajon: string, claveAuto: string, accion: string): { auto: auto, automoviles: auto[] } | false {
         let auto = this.getAuto(claveAuto);
         this.automoviles = this.automoviles.filter(auto => auto.clave !== claveAuto);
 
@@ -118,7 +119,7 @@ export class controlAutomovil {
             this.grabarArchivo();
 
             return {
-                autoModificado: auto,
+                auto,
                 automoviles: this.automoviles
             }
         }
