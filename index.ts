@@ -3,6 +3,7 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import router from './routes/routes';
 import Configuracion from './config/config';
+import mongoose from "mongoose";
 
 // Iniciando configuracion
 new Configuracion();
@@ -22,6 +23,13 @@ server.app.use(cors({
 // RUTAS
 server.app.use('/', router);
 
+// BASE DE DATOS
+mongoose.connect(String(process.env.DB_URL), { useNewUrlParser: true }, (err) => {
+    if (err) return console.error(err);
+    console.log('CONECTADO A DB.');
+});
+
+// INICIAR SERVIDOR
 server.start(() => {
-    console.log(`Escuchando el servidor en el puerto ${process.env.PORT}`);
+    console.log(`Escuchando el servidor en el puerto ${process.env.PORT}.`);
 });

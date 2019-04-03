@@ -1,23 +1,24 @@
 import { Request, Response } from "express";
-import auto from "../models/Automovil";
-import { controlAutomovil } from '../libraries/control-automovil';
-import { controlEstacionamiento } from '../libraries/control-estacionamiento';
+import Automovil from '../models/Automovil';
+import CajonEstacionamiento from '../models/CajonEstacionamiento';
 
-export class automovilController {
-    private control_automovil: controlAutomovil = new controlAutomovil();
-    private control_estacionamiento: controlEstacionamiento = new controlEstacionamiento();
-    
+export class automovilController {    
     constructor() { }
 
     getAutomoviles(req: Request, res: Response) {
-        try {
-            let autos: auto[] = this.control_automovil.getAutos();
+        Automovil.find().exec((err, autos) => {
+            if (err) {
+                return res.status(500).json({
+                    ok: false,
+                    err
+                });
+            }
 
-            if (autos.length === 0) {
+            if (autos.length == 0) {
                 return res.status(400).json({
                     ok: false,
                     err: {
-                        message: 'No se obtuvieron datos.'
+                        message: 'No se encuentra ningun automovil en base de datos.'
                     }
                 });
             }
@@ -26,28 +27,44 @@ export class automovilController {
                 ok: true,
                 autos
             });
-        } catch (err) {
-            res.status(500).json({
-                ok: false,
-                err
-            });
-        }
+        });
     }
     
     addAutomovil(req: Request, res: Response) {
-        try {
-            let result = this.control_automovil.addAuto();
+            CajonEstacionamiento.count(null).exec((err, count) => {
+                let idx = Math.floor(Math.random() * count);
 
-            res.json({
-                ok: true,
-                auto_creado: result.auto,
-                autos: result.autos
+                (async () => {
+                    try {
+                        let cajon = <any>await CajonEstacionamiento.findOne().skip(idx).exec();
+
+                        const auto = new Automovil({
+                            clave: `auto-pro-${Date.now()}`,
+                            cajonAsignado: cajon.clave
+                        });
+
+                        auto.save((err, auto) => {
+                            if (err) {
+                                return res.status(500).json({
+                                    ok: false,
+                                    err
+                                });
+                            }
+
+                            res.json({
+                                ok: true,
+                                auto
+                            });
+                        });   
+                    } catch (err) {
+                        return res.status(500).json({
+                            ok: false,
+                            err: {
+                                message: 'Ha ocurrido un error al obtener el cajón.'
+                            }
+                        });
+                    }
+                })();
             });
-        } catch (err) {
-            return res.status(500).json({
-                ok: false,
-                err: err
-            });
-        }
     };
 }
