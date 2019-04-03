@@ -31,12 +31,19 @@ export class automovilController {
     }
     
     addAutomovil(req: Request, res: Response) {
-            CajonEstacionamiento.count(null).exec((err, count) => {
+            CajonEstacionamiento.countDocuments().exec((err, count) => {
                 let idx = Math.floor(Math.random() * count);
 
                 (async () => {
                     try {
-                        let cajon = <any>await CajonEstacionamiento.findOne().skip(idx).exec();
+                        let cajon = <any>await CajonEstacionamiento
+                                            .findOne({
+                                                'estatus': {
+                                                    $ne: 'ocupado'
+                                                }
+                                            })
+                                            .skip(idx)
+                                            .exec();
 
                         const auto = new Automovil({
                             clave: `auto-pro-${Date.now()}`,
@@ -60,7 +67,8 @@ export class automovilController {
                         return res.status(500).json({
                             ok: false,
                             err: {
-                                message: 'Ha ocurrido un error al obtener el cajón.'
+                                message: 'Ha ocurrido un error al obtener el cajón.',
+                                err
                             }
                         });
                     }
