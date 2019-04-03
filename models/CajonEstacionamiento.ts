@@ -16,6 +16,9 @@ const CajonEstacionamientoSchema = new Schema({
     },
     clave: {
         type: String
+    },
+    ocupante: {
+        type: String
     }
 });
 

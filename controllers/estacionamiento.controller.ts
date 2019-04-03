@@ -31,11 +31,14 @@ export class estacionamientoController {
     }
 
     ocuparCajonEstacionamiento(req: Request, res: Response) {
-        let { auto: autoId, cajon: cajonId } = req.body;
+        let { auto: auto_, cajon: cajon_ } = req.body;
 
         CajonEstacionamiento.findByIdAndUpdate(
-            cajonId,
-            { estatus: "ocupado" },
+            cajon_._id,
+            {
+                estatus: "ocupado",
+                ocupante: auto_.clave
+            },
             { new: true, runValidators: true }
         ).exec((err, cajon) => {
             if (err) {
@@ -55,7 +58,7 @@ export class estacionamientoController {
             }
 
             Automovil.findByIdAndUpdate(
-                autoId,
+                auto_._id,
                 {
                     estacionado: true,
                     cajonAsignado: null,
