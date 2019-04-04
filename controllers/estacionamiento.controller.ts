@@ -90,4 +90,66 @@ export class estacionamientoController {
             });
         });
     }
+
+    dejarCajonEstacionamiento(req: Request, res: Response) {
+        let { auto: auto_, cajon: cajon_ } = req.body;
+
+        CajonEstacionamiento.findByIdAndUpdate(
+            cajon_._id,
+            {
+                estatus: "disponible",
+                ocupante: null
+            },
+            { new: true, runValidators: true }
+        ).exec((err, cajon) => {
+            if (err) {
+                return res.status(500).json({
+                    ok: false,
+                    err
+                });
+            }
+
+            if (!cajon) {
+              return res.status(400).json({
+                ok: false,
+                err: {
+                    message: "No se encuentra cajon de estacionamiento en base de datos."
+                }
+              });
+            }
+
+            Automovil.findByIdAndUpdate(
+                auto_._id,
+                {
+                    estacionado: false,
+                    cajonAsignado: null,
+                    cajonOcupado: null,
+                    salida: Date.now()
+                },
+                { new: true, runValidators: true }
+            ).exec((err, auto) => {
+                if (err) {
+                    return res.status(500).json({
+                        ok: false,
+                        err
+                    });
+                }
+    
+                if (!auto) {
+                    return res.status(400).json({
+                        ok: false,
+                        err: {
+                            message: "No se encuentra auto en base de datos."
+                        }
+                    });
+                }
+                
+                res.json({
+                    ok: true,
+                    auto,
+                    cajon
+                });
+            });
+        });
+    }
 }
