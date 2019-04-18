@@ -49,8 +49,8 @@ export default class Server {
             // Desconectar cliente.
             socket.clienteDesconectado(cliente, this.io);
 
-            // Crear automovil
-            socket.crearAuto(cliente, this.io);
+            // Actualizar estacionamiento.
+            socket.actualizaEstacionamiento(cliente, this.io);
         });
     }
 

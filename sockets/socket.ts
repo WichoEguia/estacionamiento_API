@@ -1,5 +1,4 @@
 import { Server, Socket } from 'socket.io';
-import * as automovil from './../controllers/automovil.controller';
 
 /**
  * Funcion que se ejecuta cuando un cliente se ha conectado.
@@ -23,6 +22,8 @@ export const clienteDesconectado = (cliente: Socket, io: Server) => {
     });
 }
 
-export const crearAuto = (cliente: Socket, io: Server) => {
-    
+export const actualizaEstacionamiento = (cliente: Socket, io: Server) => {
+    cliente.on('actualiza-estacionamiento', ( cajon ) => {
+        io.emit('actualiza-estacionamiento-x2', cajon);
+    });
 }
