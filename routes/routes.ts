@@ -12,24 +12,14 @@ router.get('/', (req, res) => {
     res.end('API rest por Luis Eguia.');
 });
 
-router.get('/seed', (req, res) => {
-    (async () => {
-        for (let i = 0; i < 20; i++) {
-            await (new CajonEstacionamiento({
-                idx: i,
-                clave: `cajon-pro-${i + 1}`
-            }).save());
-        }
-
-        res.end('Estacionamiento generado.');
-    })();
-});
-
 router.get('/getAutos', (req, res) => automovil.getAutomoviles(req, res));
 router.post('/addAuto', (req, res) => automovil.addAutomovil(req, res));
+router.delete('/borrarAutos', (req, res) => automovil.borrarAutos(req, res));
 
 router.get('/getEstacionamiento', (req, res) => estacionamiento.getEstacionamiento(req, res));
 router.post('/ocuparCajonEstacionamiento', (req, res) => estacionamiento.ocuparCajonEstacionamiento(req, res));
 router.post('/dejarCajonEstacionamiento', (req, res) => estacionamiento.dejarCajonEstacionamiento(req, res));
+router.post('/generarEstacionamiento', (req, res) => estacionamiento.generarEstacionamiento(req, res));
+router.delete('/borrarEstacionamiento', (req, res) => estacionamiento.borrarEstacionamiento(req, res));
 
 export default router;

@@ -27,7 +27,7 @@ export default class Server {
 
         this.escucharSockets();
     }
-    
+
     /**
      * Se crea una funcion para obtener la instancia del servidor si ya existe.
      * Si no existe instancia del servidor, se creara una nueva instancia.
@@ -51,6 +51,9 @@ export default class Server {
 
             // Actualizar estacionamiento.
             socket.actualizaEstacionamiento(cliente, this.io);
+
+            // Recarga pagina.
+            socket.recargaPagina(cliente, this.io);
         });
     }
 

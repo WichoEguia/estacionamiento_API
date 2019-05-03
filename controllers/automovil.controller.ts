@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import Automovil from '../models/Automovil';
 import CajonEstacionamiento from '../models/CajonEstacionamiento';
 
-export class automovilController {    
+export class automovilController {
     constructor() { }
 
     getAutomoviles(req: Request, res: Response) {
@@ -29,50 +29,66 @@ export class automovilController {
             });
         });
     }
-    
+
     addAutomovil(req: Request, res: Response) {
-            CajonEstacionamiento.countDocuments().exec((err, count) => {
-                let idx = Math.floor(Math.random() * count);
+        CajonEstacionamiento.countDocuments().exec((err, count) => {
+            let idx = Math.floor(Math.random() * count);
 
-                (async () => {
-                    try {
-                        let cajon = <any>await CajonEstacionamiento
-                                            .findOne({
-                                                'estatus': {
-                                                    $ne: 'ocupado'
-                                                }
-                                            })
-                                            .skip(idx)
-                                            .exec();
-
-                        const auto = new Automovil({
-                            clave: `auto-pro-${Date.now()}`,
-                            cajonAsignado: cajon.clave
-                        });
-
-                        auto.save((err, auto) => {
-                            if (err) {
-                                return res.status(500).json({
-                                    ok: false,
-                                    err
-                                });
+            (async () => {
+                try {
+                    let cajon = <any>await CajonEstacionamiento
+                        .findOne({
+                            'estatus': {
+                                $ne: 'ocupado'
                             }
+                        })
+                        .skip(idx)
+                        .exec();
 
-                            res.json({
-                                ok: true,
-                                auto
-                            });
-                        });   
-                    } catch (err) {
-                        return res.status(500).json({
-                            ok: false,
-                            err: {
-                                message: 'Ha ocurrido un error al obtener el cajón.',
+                    const auto = new Automovil({
+                        clave: `auto-pro-${Date.now()}`,
+                        cajonAsignado: cajon.clave
+                    });
+
+                    auto.save((err, auto) => {
+                        if (err) {
+                            return res.status(500).json({
+                                ok: false,
                                 err
-                            }
+                            });
+                        }
+
+                        res.json({
+                            ok: true,
+                            auto
                         });
-                    }
-                })();
-            });
+                    });
+                } catch (err) {
+                    return res.status(500).json({
+                        ok: false,
+                        err: {
+                            message: 'Ha ocurrido un error al obtener el cajón.',
+                            err
+                        }
+                    });
+                }
+            })();
+        });
     };
+
+    borrarAutos(req: Request, res: Response) {
+        Automovil.deleteMany({}, (err) => {
+            if (err) {
+                return res.status(500).json({
+                    ok: false,
+                    err
+                });
+            }
+
+            res.json({
+                ok: true,
+                message: 'Autos borrados.'
+            });
+        });
+    }
 }

@@ -49,12 +49,12 @@ export class estacionamientoController {
             }
 
             if (!cajon) {
-              return res.status(400).json({
-                ok: false,
-                err: {
-                    message: "No se encuentra cajon de estacionamiento en base de datos."
-                }
-              });
+                return res.status(400).json({
+                    ok: false,
+                    err: {
+                        message: "No se encuentra cajon de estacionamiento en base de datos."
+                    }
+                });
             }
 
             Automovil.findByIdAndUpdate(
@@ -72,7 +72,7 @@ export class estacionamientoController {
                         err
                     });
                 }
-    
+
                 if (!auto) {
                     return res.status(400).json({
                         ok: false,
@@ -81,7 +81,7 @@ export class estacionamientoController {
                         }
                     });
                 }
-                
+
                 res.json({
                     ok: true,
                     auto,
@@ -110,12 +110,12 @@ export class estacionamientoController {
             }
 
             if (!cajon) {
-              return res.status(400).json({
-                ok: false,
-                err: {
-                    message: "No se encuentra cajon de estacionamiento en base de datos."
-                }
-              });
+                return res.status(400).json({
+                    ok: false,
+                    err: {
+                        message: "No se encuentra cajon de estacionamiento en base de datos."
+                    }
+                });
             }
 
             Automovil.findByIdAndUpdate(
@@ -134,7 +134,7 @@ export class estacionamientoController {
                         err
                     });
                 }
-    
+
                 if (!auto) {
                     return res.status(400).json({
                         ok: false,
@@ -143,12 +143,51 @@ export class estacionamientoController {
                         }
                     });
                 }
-                
+
                 res.json({
                     ok: true,
                     auto,
                     cajon
                 });
+            });
+        });
+    }
+
+    generarEstacionamiento(req: Request, res: Response) {
+        (async () => {
+            try {
+                for (let i = 0; i < 20; i++) {
+                    await (new CajonEstacionamiento({
+                        idx: i,
+                        clave: `cajon-pro-${i + 1}`
+                    }).save());
+                }
+            } catch (err) {
+                return res.status(500).json({
+                    ok: false,
+                    err
+                });
+            }
+
+            res.json({
+                ok: true,
+                message: 'Estacionamiento creado.'
+            });
+        })();
+    }
+
+    borrarEstacionamiento(req: Request, res: Response) {
+        CajonEstacionamiento.deleteMany({}, (err) => {
+            if (err) {
+                return res.status(500).json({
+                    ok: false,
+                    err
+                });
+            }
+
+            res.json({
+                ok: true,
+                message: 'Estacionamiento borrado.'
             });
         });
     }
